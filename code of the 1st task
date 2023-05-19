@@ -1,0 +1,118 @@
+import java.util.ArrayList;
+import java.util.List;
+
+class MenuItem {
+    String name;
+    String type;
+    double price;
+
+    MenuItem(String name, String type, double price) {
+        this.name = name;
+        this.type = type;
+        this.price = price;
+    }
+}
+
+class Coffee_Shop {
+    private String name;
+    private MenuItem[] menu;
+    private List<String> orders;
+
+    Coffee_Shop(String name, MenuItem[] menu) {
+        this.name = name;
+        this.menu = menu;
+        this.orders = new ArrayList<>();
+    }
+
+    String Add_Order(String itemName) {
+        for (MenuItem item : menu) {
+            if (item.name.equals(itemName)) {
+                orders.add(itemName);
+                return "";
+            }
+        }
+        return "This item is currently unavailable!";
+    }
+
+    String Fulfill_Order() {
+        if (!orders.isEmpty()) {
+            String item = orders.remove(0);
+            return "The " + item + " is ready!";
+        }
+        return "All orders have been fulfilled!";
+    }
+
+    List<String> List_Orders() {
+        return orders;
+    }
+
+    double Due_Amount() {
+        double total = 0.0;
+        for (String item : orders) {
+            for (MenuItem menuItem : menu) {
+                if (menuItem.name.equals(item)) {
+                    total += menuItem.price;
+                    break;
+                }
+            }
+        }
+        return total;
+    }
+
+    String Cheapest_Item() {
+        double minPrice = Double.MAX_VALUE;
+        String cheapestItemName = "";
+        for (MenuItem item : menu) {
+            if (item.price < minPrice) {
+                minPrice = item.price;
+                cheapestItemName = item.name;
+            }
+        }
+        return cheapestItemName;
+    }
+
+    List<String> Drinks_Only() {
+        List<String> drinks = new ArrayList<>();
+        for (MenuItem item : menu) {
+            if (item.type.equals("drink")) {
+                drinks.add(item.name);
+            }
+        }
+        return drinks;
+    }
+
+    List<String> Food_Only() {
+        List<String> food = new ArrayList<>();
+        for (MenuItem item : menu) {
+            if (item.type.equals("food")) {
+                food.add(item.name);
+            }
+        }
+        return food;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        MenuItem[] menu = {
+                new MenuItem("Espresso", "drink", 2.5),
+                new MenuItem("Cappuccino", "drink", 3.0),
+                new MenuItem("Croissant", "food", 1.5),
+                new MenuItem("Muffin", "food", 2.0)
+        };
+
+        Coffee_Shop coffeeShop = new Coffee_Shop("My Coffee Shop", menu);
+
+        coffeeShop.Add_Order("Espresso");
+        coffeeShop.Add_Order("Croissant");
+        coffeeShop.Add_Order("Cappuccino");
+
+        System.out.println(coffeeShop.Fulfill_Order());  
+        System.out.println(coffeeShop.Fulfill_Order());  
+        System.out.println(coffeeShop.Fulfill_Order());  
+        System.out.println(coffeeShop.Fulfill_Order());  
+
+        List<String> orders = coffeeShop.List_Orders();
+        System.out.println("Orders: " + orders);
+    }
+}
